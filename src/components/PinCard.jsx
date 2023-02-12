@@ -85,7 +85,7 @@ export default function PinCard({ pin, pinUser }) {
     position: 'relative',
     cursor: 'zoom-in',
     height: `${imgHeight}px`,
-    width: `${imgWidth}px`,
+    width: `100%`,
     borderRadius: '20px',
     backgroundImage: `url(${imageUrl})`,
     backgroundPosition: 'center',

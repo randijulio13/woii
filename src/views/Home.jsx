@@ -5,6 +5,7 @@ import PinCard from '../components/PinCard'
 import Template from '../components/Template'
 import { db } from '../lib/firebase'
 import Loader from '../components/Loader'
+import CreateButton from '../components/CreateButton'
 
 export default function Home() {
   const [pins, setPins] = useState([])
@@ -55,16 +56,19 @@ export default function Home() {
   return (
     <Template>
       {isLoading ? (
-        <div className='h-[calc(100vh-72px)]'><Loader /></div>
+        <div className="h-[calc(100vh-72px)]">
+          <Loader />
+        </div>
       ) : (
         // <div className="grid gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lgmd:grid-cols-4 lg:grid-cols-6">
-          <div className="columns-1 gap-8 p-4 md:columns-2 lgmd:columns-4 lg:columns-6">
+        <div className="columns-1 gap-8 p-4 md:columns-2 lgmd:columns-4 lg:columns-6">
           {pins.map((pin, index) => {
             let user = getUser(pin.userId)
             return <PinCard {...{ pin, pinUser: user }} key={index} />
           })}
         </div>
       )}
+      <CreateButton />
     </Template>
   )
 }

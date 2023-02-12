@@ -159,20 +159,20 @@ export default function Pin() {
     <Template>
       <button
         onClick={handleBack}
-        className="ac absolute left-4 hidden aspect-square rounded-full p-3 outline-none duration-300 hover:scale-110 hover:bg-gray-200 active:scale-100 active:bg-black active:text-white lg:block"
+        className="absolute left-4 hidden aspect-square rounded-full p-3 outline-none duration-300 hover:scale-110 hover:bg-gray-200 active:scale-100 active:bg-black active:text-white lg:block"
       >
         <FaArrowLeft />
       </button>
-      <div className="my-8 flex flex-col items-center">
-        <div className="relative w-2/3 overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <div className="lg:my-8 flex flex-col items-center">
+        <div className="relative w-full min-h-screen lg:min-h-full lg:w-2/3 overflow-hidden lg:rounded-3xl bg-white shadow-2xl">
           {isLoading && (
             <div className="absolute z-50 flex h-full w-full flex-col items-center justify-center bg-black/30">
               <Loader />
             </div>
           )}
-          <div className="m-4 grid min-h-[256px] grid-cols-1 gap-x-4 lg:grid-cols-2">
+          <div className="m-4 grid lg:min-h-[256px] h-screen grid-cols-1 gap-x-4 lg:grid-cols-2">
             <img src={imageUrl} className="rounded-2xl" alt="" ref={imageRef} />
-            <div className="flex flex-col gap-y-2 p-4">
+            <div className="flex flex-col gap-y-2 p-4 h-full overflow-auto">
               <div className="relative flex items-center justify-between">
                 <button
                   className="rounded-full bg-white p-3 text-lg font-bold outline-none duration-300 hover:scale-110 hover:bg-gray-100 active:scale-100 active:bg-black active:text-white"

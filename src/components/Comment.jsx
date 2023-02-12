@@ -19,13 +19,15 @@ export default function Comment({ comment, users }) {
       <img src={commentUser?.photoURL} alt="" className="h-7 rounded-full" />
       <div className="flex flex-col">
         <div className="flex gap-x-2">
-          <Link
-            to={`/profile/${commentUser?.email?.split('@')[0]}`}
-            className="text-sm font-bold hover:underline"
-          >
-            {commentUser?.email}
-          </Link>
-          <span className="text-sm">{comment?.comment}</span>
+          <span className="text-sm">
+            <Link
+              to={`/profile/${commentUser?.email?.split('@')[0]}`}
+              className="text-sm font-bold hover:underline"
+            >
+              {commentUser?.email}
+            </Link>{' '}
+            {comment?.comment}
+          </span>
         </div>
         <span className="text-xs text-gray-400">
           {moment(comment?.timestamp?.toDate()).fromNow()}

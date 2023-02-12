@@ -11,7 +11,6 @@ export default function Template({ children, className, ...props }) {
     <div className={`${className}`}>
       <Navbar />
       <div className="relative bg-white">{children}</div>
-      {/* <CreateButton /> */}
       <ToastContainer />
     </div>
   )
