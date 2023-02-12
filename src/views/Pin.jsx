@@ -59,7 +59,10 @@ export default function Pin() {
     commentsSnap.forEach((doc) => {
       userArr.push(doc.data().userId)
     })
-    getCommentUser(userArr)
+    if(userArr.length > 0)
+    {
+      getCommentUser(userArr)
+    }
   }
 
   const getCommentUser = async (userArr) => {
