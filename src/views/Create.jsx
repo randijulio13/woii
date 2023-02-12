@@ -65,7 +65,7 @@ export default function Create() {
         onSubmit={handleSubmit(onSubmit)}
         className={`flex h-[calc(100vh-72px)] justify-center bg-gray-100 lg:py-10`}
       >
-        <div className="relative flex min-h-full w-full flex-col gap-y-4 overflow-hidden bg-white p-5 shadow lg:mx-5 lg:w-[900px] lg:rounded-xl lg:p-10">
+        <div className="relative flex min-h-full w-full flex-col gap-y-4 overflow-auto bg-white p-5 shadow lg:mx-5 lg:w-[900px] lg:overflow-hidden lg:rounded-xl lg:p-10">
           {isLoading && (
             <div className="absolute inset-0 z-50 bg-black/30">
               <Loader />
