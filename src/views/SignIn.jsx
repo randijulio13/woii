@@ -5,6 +5,7 @@ import {
   doc,
   serverTimestamp,
   setDoc,
+  Timestamp,
 } from 'firebase/firestore'
 import React, { useContext } from 'react'
 import { FcGoogle } from 'react-icons/fc'
