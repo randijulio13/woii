@@ -170,7 +170,7 @@ export default function Pin() {
               <Loader />
             </div>
           )}
-          <div className="m-4 grid lg:min-h-[256px] h-screen grid-cols-1 gap-x-4 lg:grid-cols-2">
+          <div className="m-4 grid lg:min-h-[256px] min-h-screen grid-cols-1 gap-x-4 lg:grid-cols-2">
             <img src={imageUrl} className="rounded-2xl" alt="" ref={imageRef} />
             <div className="flex flex-col gap-y-2 p-4 h-full overflow-auto">
               <div className="relative flex items-center justify-between">
