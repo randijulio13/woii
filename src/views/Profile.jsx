@@ -7,12 +7,21 @@ import { db } from '../lib/firebase'
 import { useParams } from 'react-router-dom'
 
 export default function Profile() {
-  const [ user, setUser ] = useState(null)
-  const { userName } = useParams()
+  const [profileUser, setProfileUser] = useState(null)
+  const { user } = useContext(UserContext)
+  let { userName } = useParams()
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (!userName) {
+      userName = user.email.split('@')[0]
+      setProfileUser({
+        name: user.displayName,
+        photoURL: user.photoURL,
+        email: user.email,
+      })
+    }
     getUser()
-  },[])
+  }, [])
 
   const getUser = async () => {
     const q = query(
@@ -22,7 +31,7 @@ export default function Profile() {
     )
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach((doc) => {
-      setUser(doc.data())
+      setProfileUser(doc.data())
     })
   }
 
@@ -41,16 +50,16 @@ export default function Profile() {
         <Container className="flex flex-col gap-y-2">
           <div className="flex justify-center">
             <img
-              src={user?.photoURL}
+              src={profileUser?.photoURL}
               className="rounded-full"
               width="120px"
               alt=""
             />
           </div>
           <h1 className="text-center font-title text-4xl font-semibold tracking-widest">
-            {user?.name}
+            {profileUser?.name}
           </h1>
-          <h2 className="text-center text-gray-400">{user?.email}</h2>
+          <h2 className="text-center text-gray-400">{profileUser?.email}</h2>
         </Container>
       </div>
     </Template>

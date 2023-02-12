@@ -7,6 +7,7 @@ import Home from '../views/Home'
 import Profile from '../views/Profile'
 import SignIn from '../views/SignIn'
 import Test from '../views/Test'
+import NoMatch from '../views/NoMatch'
 
 export default function index() {
   return (
@@ -19,9 +20,10 @@ export default function index() {
       <Route element={<Guest />}>
         <Route path="/signin" element={<SignIn />} />
       </Route>
-      <Route element={<Guest />}>
-        <Route path="/:userName" element={<Profile />} />
+      <Route element={<Auth />}>
+        <Route path="/profile/:userName?" element={<Profile />} />
       </Route>
+      <Route path="*" element={<NoMatch />} />
     </Routes>
   )
 }

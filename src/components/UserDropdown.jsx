@@ -9,8 +9,6 @@ import { auth } from '../lib/firebase'
 export default function UserDropdown() {
     const { user, setUser } = useContext(UserContext)
 
-    const userName = user?.email?.split('@')[0]
-
     const handleSignOut = () => {
         signOut(auth).then(() => {
             setUser(null)
@@ -37,7 +35,7 @@ export default function UserDropdown() {
                     <div>
                         <span className='tracking-light text-sm text-gray-500'>Currently In</span>
                         <Menu.Item>
-                            <Link to={`/${userName}`}>
+                            <Link to={'/profile'}>
                                 <DropdownButton>
                                     <div className="flex gap-x-4 my-1">
                                         <div>
