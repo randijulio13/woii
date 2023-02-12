@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import UserContext from '../contexts/UserContext'
 import UserDropdown from './UserDropdown'
-import { HiCamera } from 'react-icons/hi'
+import { RiCameraLensFill } from 'react-icons/ri'
 
 export default function Navbar() {
 
@@ -11,7 +11,7 @@ export default function Navbar() {
     return (
         <nav className='w-full sticky h-[72px]  top-0 z-50 shadow flex items-center justify-between px-5 bg-white'>
             <div className='flex space-x-4 items-center w-1/4'>
-                <NavLink to="/" className='outline-none'><h1 className="font-title text-3xl flex items-center">W<span className='text-red-500'><HiCamera /></span>ii</h1></NavLink>
+                <NavLink to="/" className='outline-none'><h1 className="font-title text-3xl flex items-center">W<span className='text-red-500'><RiCameraLensFill /></span>ii</h1></NavLink>
                 <NavLink to="/" className={({ isActive }) => isActive ? 'bg-black text-white rounded-full font-bold px-4 py-2 hover:scale-110 active:scale-100 duration-200' : 'hover:scale-110 active:scale-100 duration-200 rounded-full font-bold px-4 py-2 hover:bg-gray-200'}>
                     Home
                 </NavLink>

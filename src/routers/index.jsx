@@ -4,10 +4,10 @@ import Auth from '../middlewares/Auth'
 import Guest from '../middlewares/Guest'
 import Create from '../views/Create'
 import Home from '../views/Home'
+import NoMatch from '../views/NoMatch'
+import Pin from '../views/Pin'
 import Profile from '../views/Profile'
 import SignIn from '../views/SignIn'
-import Test from '../views/Test'
-import NoMatch from '../views/NoMatch'
 
 export default function index() {
   return (
@@ -15,7 +15,7 @@ export default function index() {
       <Route element={<Auth />}>
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<Create />} />
-        <Route path="/test" element={<Test />} />
+        <Route path="/pin/:pinId" element={<Pin />} />
       </Route>
       <Route element={<Guest />}>
         <Route path="/signin" element={<SignIn />} />

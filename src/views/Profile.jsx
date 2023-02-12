@@ -1,15 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import Container from '../components/Container'
 import Template from '../components/Template'
 import UserContext from '../contexts/UserContext'
 import { collection, query, where, getDocs, limit } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import classNames from 'classnames'
 
 export default function Profile() {
   const [profileUser, setProfileUser] = useState(null)
   const { user } = useContext(UserContext)
+  const [activeTab, setActiveTab] = useState('Created')
   let { userName } = useParams()
+
+  const tabs = useMemo(() => {
+    return [{ title: 'Created' }, { title: 'Saved' }]
+  })
 
   useEffect(() => {
     if (!userName) {
@@ -44,10 +51,25 @@ export default function Profile() {
     })
   }
 
+  const handleShareProfile = () => {
+    let url = document.URL
+    navigator.clipboard.writeText(url)
+    toast('Copied link to your clipboard to share', {
+      position: 'bottom-center',
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark',
+    })
+  }
+
   return (
     <Template>
       <div className="py-8">
-        <Container className="flex flex-col gap-y-2">
+        <Container className="flex flex-col items-center justify-center gap-y-4">
           <div className="flex justify-center">
             <img
               src={profileUser?.photoURL}
@@ -56,10 +78,39 @@ export default function Profile() {
               alt=""
             />
           </div>
-          <h1 className="text-center font-title text-4xl font-semibold tracking-widest">
+          <h1 className="text-center text-4xl font-bold">
             {profileUser?.name}
           </h1>
           <h2 className="text-center text-gray-400">{profileUser?.email}</h2>
+          <div className="flex justify-center">
+            <button
+              onClick={handleShareProfile}
+              className="flex h-12 items-center justify-center rounded-full bg-gray-100 px-4 font-bold outline-none duration-200 hover:scale-110 hover:bg-gray-300 active:scale-100 active:bg-black active:text-white"
+            >
+              Share
+            </button>
+          </div>
+
+          <div className="mt-4 flex gap-x-4">
+            {tabs.map((tab, index) => {
+              return (
+                <button
+                  onClick={() => setActiveTab(tab.title)}
+                  key={index}
+                  className={classNames(
+                    'bg-white px-3 py-1 font-bold text-black outline-none duration-300',
+                    {
+                      'border-b-4 border-b-black': tab.title == activeTab,
+                      'rounded-lg hover:scale-110 hover:bg-gray-200 active:scale-100 active:bg-black active:text-white':
+                        tab.title != activeTab,
+                    }
+                  )}
+                >
+                  {tab.title}
+                </button>
+              )
+            })}
+          </div>
         </Container>
       </div>
     </Template>

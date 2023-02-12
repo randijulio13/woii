@@ -24,7 +24,7 @@ export default function SignIn() {
       email:result.user.email,
       name: result.user.displayName,
       photoURL: result.user.photoURL,
-      lastLogin: serverTimestamp(),
+      lastLogin: Timestamp.fromDate(new Date()),
     })
   }
 

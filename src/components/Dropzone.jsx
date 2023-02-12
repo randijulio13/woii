@@ -7,22 +7,17 @@ import { MdOutlineClose } from 'react-icons/md'
 
 const Dropzone = forwardRef((props, ref) => {
   const [myFiles, setMyFiles] = useState([])
-  const { setValue, register, errors, clearErrors } = props
-
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      setMyFiles([...myFiles, ...acceptedFiles])
-      setValue('image', acceptedFiles)
-      clearErrors('image')
-    },
-    [myFiles]
-  )
+  const { setValue, errors, clearErrors, ...otherProps } = props
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'image/*': [],
     },
-    onDrop,
+    onDrop: (acceptedFiles) => {
+      setValue('image', acceptedFiles)
+      setMyFiles(acceptedFiles)
+      clearErrors('image')
+    },
   })
 
   const handleResetFile = () => {
@@ -36,7 +31,7 @@ const Dropzone = forwardRef((props, ref) => {
         'relative flex h-full items-center overflow-hidden rounded-lg bg-gray-100 p-4',
         {
           'bg-gray-100': !errors.image,
-          'bg-red-100 border-red-500': errors.image,
+          'border-red-500 bg-red-100': errors.image,
         }
       )}
     >
@@ -49,7 +44,7 @@ const Dropzone = forwardRef((props, ref) => {
           >
             <MdOutlineClose />
           </button>
-          <img src={URL.createObjectURL(myFiles[0])} />
+          <img src={URL.createObjectURL(myFiles[0])} className="rounded-xl" />
         </>
       ) : (
         ''
@@ -59,28 +54,20 @@ const Dropzone = forwardRef((props, ref) => {
         className={classNames(
           'flex h-full w-full flex-col items-center justify-center space-y-4 rounded-lg border-2 border-dashed outline-none',
           {
-            'hover:cursor-pointer':!myFiles[0],
-            'hidden': myFiles[0],
+            'hover:cursor-pointer': !myFiles[0],
+            hidden: myFiles[0],
             'border-gray-300': !errors.image,
             'border-red-300': errors.image,
           }
         )}
       >
-        <input
-          ref={ref}
-          {...getInputProps()}
-          {...register('image', {
-            required: 'An image is required to create a pin',
-          })}
-        />
+        <input ref={ref} {...otherProps} {...getInputProps()} />
         {errors.image ? (
           <>
             <span className="flex aspect-square flex-col items-center justify-center rounded-full bg-red-700 p-1 text-3xl font-bold text-white">
               !
             </span>
-            <p className="text-center text-red-900">
-              Image is required to create a pin
-            </p>
+            <p className="text-center text-red-900">{errors?.image.message}</p>
           </>
         ) : (
           <>

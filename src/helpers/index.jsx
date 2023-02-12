@@ -1,5 +1,5 @@
 const removeHttps = (url) => {
-  return url.replace(/^https?:\/\//, '')
+  return url.replace(/^https?:\/\//, '').replace(/^http?:\/\//, '')
 }
 
 const destinationLink = (url, urlLength = 10) => {

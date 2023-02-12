@@ -1,8 +1,8 @@
 import styled from '@emotion/styled/macro'
 import React, { useContext, useEffect, useState } from 'react'
 import { linkGenerate } from '../lib/cloudinary'
-import { MdDownload } from 'react-icons/md'
-import { ImRedo2 } from 'react-icons/im'
+import { MdDownloadForOffline } from 'react-icons/md'
+import { BsArrowUpRightCircleFill } from 'react-icons/bs'
 import { getImgMeta, destinationLink } from '../helpers'
 import { saveAs } from 'file-saver'
 import { getAuth } from 'firebase/auth'
@@ -20,6 +20,7 @@ import {
 import { db } from '../lib/firebase'
 import UserContext from '../contexts/UserContext'
 import classNames from 'classnames'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function PinCard({ pin, pinUser }) {
   const { user } = useContext(UserContext)
@@ -28,6 +29,7 @@ export default function PinCard({ pin, pinUser }) {
   const [imgWidth, setImgWidth] = useState(0)
   const [isSaved, setIsSaved] = useState(false)
   const [totalSave, setTotalSave] = useState(0)
+  const navigate = useNavigate()
 
   useEffect(() => {
     getMeta()
@@ -95,7 +97,9 @@ export default function PinCard({ pin, pinUser }) {
     },
   })
 
-  const handleSavePin = async () => {
+  const handleSavePin = async (event) => {
+    event.stopPropagation()
+
     const savedPinId = `${user.uid}_${pin.id}`
     if (isSaved) {
       await deleteDoc(doc(db, 'savedPins', savedPinId))
@@ -111,59 +115,60 @@ export default function PinCard({ pin, pinUser }) {
     }
   }
 
-  const handleDownload = () => {
+  const handleDownload = (event) => {
+    event.stopPropagation()
     saveAs(linkGenerate(pin.publicId), pin.id + '.jpg')
   }
 
   return (
     <div className="mb-4 aspect-auto w-full">
-      <Background>
+      <Background onClick={() => navigate(`/pin/${pin.id}`)}>
         <DisplayOver>
           <Hover>
             <button
               onClick={handleDownload}
-              className="absolute top-3 left-3 rounded-full bg-white/80 p-1 text-2xl text-black hover:bg-white"
+              className="absolute top-3 left-3 aspect-square h-8 rounded-full bg-white/80 p-1 text-2xl text-black hover:bg-white"
             >
-              <MdDownload />
+              <MdDownloadForOffline />
             </button>
-
+            {pin.destinationLink && (
+              <a
+                onClick={(event) => event.stopPropagation()}
+                href={`https://${pin.destinationLink}`}
+                target="_blank"
+                className="absolute top-3 left-12 flex aspect-square h-8 items-center justify-center rounded-full bg-white/80 p-1 text-lg text-black hover:bg-white"
+              >
+                <BsArrowUpRightCircleFill />
+              </a>
+            )}
             <button
               onClick={handleSavePin}
               className={classNames(
-                'absolute top-3 right-3 rounded-full py-1 px-4 font-bold text-white',
+                'absolute top-3 right-3 rounded-full py-2 px-4 font-bold text-white duration-300 hover:scale-110 active:scale-100',
                 {
                   'bg-black hover:bg-gray-800': isSaved,
                   'bg-red-500 hover:bg-red-600': !isSaved,
                 }
               )}
-              //   className={`$absolute top-3 right-3 rounded-full bg-red-500 py-1 px-4 font-bold text-white hover:bg-red-600`}
             >
               {totalSave} {isSaved ? 'Saved' : 'Save'}
             </button>
 
-            {pin.destinationLink && (
-              <a
-                href={pin.destinationLink}
-                target="_blank"
-                className="absolute bottom-3 left-3 flex items-center gap-x-2 rounded-full bg-white/80 px-2 py-1 text-black outline-none hover:bg-white"
-              >
-                <span className="text-lg">
-                  <ImRedo2 />
-                </span>
-                {destinationLink(pin.destinationLink)}
-              </a>
-            )}
+            <Link
+              onClick={(e) => e.stopPropagation()}
+              to={`/profile/${pinUser?.email.split('@')[0]}`}
+              className="absolute left-3 bottom-3 flex items-center gap-x-2"
+            >
+              <img
+                src={pinUser?.photoURL}
+                className="aspect-square h-6 rounded-full"
+                alt=""
+              />
+              <span className="text-sm font-bold">{pinUser?.name}</span>
+            </Link>
           </Hover>
         </DisplayOver>
       </Background>
-      <div className="mt-2 flex items-center gap-x-2">
-        <img
-          src={pinUser?.photoURL}
-          className="aspect-square h-6 rounded-full"
-          alt=""
-        />
-        <span className="text-sm font-bold">{pinUser?.name}</span>
-      </div>
     </div>
   )
 }

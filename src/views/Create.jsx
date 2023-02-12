@@ -8,6 +8,7 @@ import Dropzone from '../components/Dropzone'
 import Loader from '../components/Loader'
 import Template from '../components/Template'
 import UserContext from '../contexts/UserContext'
+import { removeHttps } from '../helpers'
 import { cloudName, uploadPreset } from '../lib/cloudinary'
 import { db } from '../lib/firebase'
 
@@ -22,9 +23,20 @@ export default function Create() {
     setValue,
     formState: { errors },
     clearErrors,
+    getValues,
+    setError,
   } = useForm()
 
+  useEffect(() => {}, [])
+
   const onSubmit = async (data) => {
+    if (!data.image) {
+      setError('image', {
+        type: 'required',
+        message: 'Image is required to create a pin',
+      })
+      return
+    }
     setIsLoading(true)
     const formData = new FormData()
     formData.append('file', data.image[0])
@@ -38,7 +50,7 @@ export default function Create() {
     await addDoc(collection(db, 'pins'), {
       title: data.title,
       description: data.description,
-      destinationLink: data.destinationLink,
+      destinationLink: removeHttps(data.destinationLink),
       publicId,
       userId: user.uid,
       createdAt: Timestamp.fromDate(new Date()),
@@ -67,7 +79,12 @@ export default function Create() {
           </button>
           <div className="flex h-full flex-col gap-4 lg:flex-row">
             <div className="h-full flex-grow lg:w-1/2">
-              <Dropzone {...{ setValue, register, errors, clearErrors }} />
+              <Dropzone
+                {...{ setValue, errors, clearErrors }}
+                {...register('image', {
+                  required: 'Image is required to create a pin',
+                })}
+              />
             </div>
             <div className="flex h-full flex-grow flex-col gap-y-2">
               <input
