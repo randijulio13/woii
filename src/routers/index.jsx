@@ -15,10 +15,12 @@ export default function index() {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<Create />} />
         <Route path="/test" element={<Test />} />
-        <Route path="/:userName" element={<Profile />} />
       </Route>
       <Route element={<Guest />}>
         <Route path="/signin" element={<SignIn />} />
+      </Route>
+      <Route element={<Guest />}>
+        <Route path="/:userName" element={<Profile />} />
       </Route>
     </Routes>
   )

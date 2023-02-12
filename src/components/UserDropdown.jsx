@@ -9,7 +9,7 @@ import { auth } from '../lib/firebase'
 export default function UserDropdown() {
     const { user, setUser } = useContext(UserContext)
 
-    const userName = user.email.split('@')[0]
+    const userName = user?.email?.split('@')[0]
 
     const handleSignOut = () => {
         signOut(auth).then(() => {
