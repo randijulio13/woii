@@ -21,10 +21,11 @@ import classNames from 'classnames'
 import Loader from '../components/Loader'
 import { FaCopy } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-import { removeHttps } from '../helpers'
+import { removeHttps, addHttps } from '../helpers'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useForm } from 'react-hook-form'
 import Comment from '../components/Comment'
+import ProfilePic from '../components/ProfilePic'
 
 export default function Pin() {
   const { pinId } = useParams()
@@ -59,8 +60,7 @@ export default function Pin() {
     commentsSnap.forEach((doc) => {
       userArr.push(doc.data().userId)
     })
-    if(userArr.length > 0)
-    {
+    if (userArr.length > 0) {
       getCommentUser(userArr)
     }
   }
@@ -166,16 +166,16 @@ export default function Pin() {
       >
         <FaArrowLeft />
       </button>
-      <div className="lg:my-8 flex flex-col items-center">
-        <div className="relative w-full min-h-screen lg:min-h-full lg:w-2/3 overflow-hidden lg:rounded-3xl bg-white shadow-2xl">
+      <div className="flex flex-col items-center lg:my-8">
+        <div className="relative min-h-screen w-full overflow-hidden bg-white shadow-2xl lg:min-h-full lg:w-2/3 lg:rounded-3xl">
           {isLoading && (
             <div className="absolute z-50 flex h-full w-full flex-col items-center justify-center bg-black/30">
               <Loader />
             </div>
           )}
-          <div className="m-4 grid lg:min-h-[256px] min-h-screen grid-cols-1 gap-x-4 lg:grid-cols-2">
+          <div className="m-4 grid min-h-screen grid-cols-1 gap-x-4 lg:min-h-[256px] lg:grid-cols-2">
             <img src={imageUrl} className="rounded-2xl" alt="" ref={imageRef} />
-            <div className="flex flex-col gap-y-2 p-4 h-full overflow-auto">
+            <div className="flex h-full flex-col gap-y-2 overflow-auto p-4">
               <div className="relative flex items-center justify-between">
                 <button
                   className="rounded-full bg-white p-3 text-lg font-bold outline-none duration-300 hover:scale-110 hover:bg-gray-100 active:scale-100 active:bg-black active:text-white"
@@ -198,7 +198,11 @@ export default function Pin() {
               </div>
               <div className="max-h-[calc(100vh-72px)] space-y-4 overflow-auto">
                 {pin?.destinationLink && (
-                  <a href={pin?.destinationLink} className="underline">
+                  <a
+                    href={addHttps(pin?.destinationLink)}
+                    className="underline"
+                    target="_blank"
+                  >
                     {pin ? removeHttps(pin?.destinationLink).split('/')[0] : ''}
                   </a>
                 )}
@@ -209,11 +213,7 @@ export default function Pin() {
                   to={`/profile/${pinUser?.email.split('@')[0]}`}
                   className="flex items-center gap-x-2"
                 >
-                  <img
-                    src={pinUser?.photoURL}
-                    className="aspect-square h-6 rounded-full"
-                    alt=""
-                  />
+                  <ProfilePic url={pinUser?.photoURL} className="h-6" />
                   <span className="text-sm font-bold">{pinUser?.name}</span>
                 </Link>
 
@@ -244,11 +244,7 @@ export default function Pin() {
                 onSubmit={handleSubmit(addComment)}
                 className="mt-auto flex items-center gap-x-4 border-t pt-4"
               >
-                <img
-                  src={user.photoURL}
-                  className="aspect-square h-12 rounded-full"
-                  alt=""
-                />
+                <ProfilePic url={user?.photoURL} className="h-12" />
                 <input
                   {...register('comment', { required: true })}
                   type="text"

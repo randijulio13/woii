@@ -21,6 +21,7 @@ import { db } from '../lib/firebase'
 import UserContext from '../contexts/UserContext'
 import classNames from 'classnames'
 import { Link, useNavigate } from 'react-router-dom'
+import ProfilePic from './ProfilePic'
 
 export default function PinCard({ pin, pinUser }) {
   const { user } = useContext(UserContext)
@@ -159,11 +160,7 @@ export default function PinCard({ pin, pinUser }) {
               to={`/profile/${pinUser?.email.split('@')[0]}`}
               className="absolute left-3 bottom-3 flex items-center gap-x-2"
             >
-              <img
-                src={pinUser?.photoURL}
-                className="aspect-square h-6 rounded-full"
-                alt=""
-              />
+              <ProfilePic url={pinUser?.photoURL} className="h-6" />
               <span className="text-sm font-bold">{pinUser?.name}</span>
             </Link>
           </Hover>

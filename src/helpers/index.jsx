@@ -2,6 +2,10 @@ const removeHttps = (url) => {
   return url.replace(/^https?:\/\//, '').replace(/^http?:\/\//, '')
 }
 
+const addHttps = (url) => {
+  return 'https://' + url
+}
+
 const destinationLink = (url, urlLength = 10) => {
   let link = url.replace(/^https?:\/\//, '')
   let dots = urlLength === link.length ? '' : '...'
@@ -18,4 +22,4 @@ const getImgMeta = (url, cb) => {
   })
 }
 
-export { destinationLink, removeHttps, getImgMeta }
+export { destinationLink, removeHttps, getImgMeta, addHttps }

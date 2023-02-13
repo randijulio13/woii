@@ -7,6 +7,9 @@ import { db } from '../lib/firebase'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import classNames from 'classnames'
+import CreatedPin from '../components/CreatedPin'
+import SavedPin from '../components/SavedPin'
+import ProfilePic from '../components/ProfilePic'
 
 export default function Profile() {
   const [profileUser, setProfileUser] = useState(null)
@@ -28,7 +31,7 @@ export default function Profile() {
       })
     }
     getUser()
-  }, [])
+  }, [userName])
 
   const getUser = async () => {
     const q = query(
@@ -69,14 +72,9 @@ export default function Profile() {
   return (
     <Template>
       <div className="py-8">
-        <Container className="flex flex-col items-center justify-center gap-y-4">
+        <div className="flex flex-col items-center justify-center gap-y-4">
           <div className="flex justify-center">
-            <img
-              src={profileUser?.photoURL}
-              className="rounded-full"
-              width="120px"
-              alt=""
-            />
+            <ProfilePic url={profileUser?.photoURL} className="w-[120px]" />
           </div>
           <h1 className="text-center text-4xl font-bold">
             {profileUser?.name}
@@ -111,7 +109,16 @@ export default function Profile() {
               )
             })}
           </div>
-        </Container>
+          {profileUser ? (
+            activeTab == 'Created' ? (
+              <CreatedPin user={profileUser} />
+            ) : (
+              <SavedPin user={profileUser} />
+            )
+          ) : (
+            ''
+          )}
+        </div>
       </div>
     </Template>
   )

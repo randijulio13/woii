@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ProfilePic from './ProfilePic'
 
 export default function Comment({ comment, users }) {
   const [commentUser, setCommentUser] = useState({})
@@ -16,7 +17,7 @@ export default function Comment({ comment, users }) {
   }, [users])
   return (
     <div className="flex gap-x-2">
-      <img src={commentUser?.photoURL} alt="" className="h-7 rounded-full" />
+      <ProfilePic url={commentUser?.photoURL} className="h-7" />
       <div className="flex flex-col">
         <div className="flex gap-x-2">
           <span className="text-sm">
