@@ -1,26 +1,22 @@
 import styled from '@emotion/styled/macro'
-import React, { useContext, useEffect, useState } from 'react'
-import { linkGenerate } from '../lib/cloudinary'
-import { MdDownloadForOffline } from 'react-icons/md'
-import { BsArrowUpRightCircleFill } from 'react-icons/bs'
-import { getImgMeta, destinationLink } from '../helpers'
+import classNames from 'classnames'
 import { saveAs } from 'file-saver'
-import { getAuth } from 'firebase/auth'
 import {
-  addDoc,
   collection,
   deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
+  doc, getDocs,
   query,
   setDoc,
-  where,
+  where
 } from 'firebase/firestore'
-import { db } from '../lib/firebase'
-import UserContext from '../contexts/UserContext'
-import classNames from 'classnames'
+import React, { useContext, useEffect, useState } from 'react'
+import { BsArrowUpRightCircleFill } from 'react-icons/bs'
+import { MdDownloadForOffline } from 'react-icons/md'
 import { Link, useNavigate } from 'react-router-dom'
+import UserContext from '../contexts/UserContext'
+import { getImgMeta } from '../helpers'
+import { linkGenerate } from '../lib/cloudinary'
+import { db } from '../lib/firebase'
 import ProfilePic from './ProfilePic'
 
 export default function PinCard({ pin, pinUser }) {
@@ -116,22 +112,11 @@ export default function PinCard({ pin, pinUser }) {
     }
   }
 
-  useEffect(() => {
-    console.log('height' + imgHeight)
-    console.log('width' + imgWidth)
-  }, [imgHeight, imgWidth])
-
   const handleDownload = (event) => {
     event.stopPropagation()
     saveAs(linkGenerate(pin.publicId), pin.id + '.jpg')
   }
 
-  {
-    /* <div className="mb-4 aspect-auto w-full"> */
-  }
-  {
-    /* <div className={`mb-4 aspect-auto w-[${imgWidth}px] h-[${imgHeight}px]`}> */
-  }
   return (
     <div className={`mb-4 aspect-auto h-[${imgHeight}px] w-[${imgWidth}px]`}>
       <Background onClick={() => navigate(`/pin/${pin.id}`)}>

@@ -1,18 +1,12 @@
 import {
   collection,
-  getDocs,
-  limit,
-  query,
-  where,
-  FieldPath,
+  getDocs, query,
+  where
 } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { FaSpinner } from 'react-icons/fa'
-import PinCard from '../components/PinCard'
-import Template from '../components/Template'
-import { db } from '../lib/firebase'
 import Loader from '../components/Loader'
-import CreateButton from '../components/CreateButton'
+import PinCard from '../components/PinCard'
+import { db } from '../lib/firebase'
 
 export default function SavedPin({ user }) {
   const [pins, setPins] = useState([])
@@ -34,7 +28,11 @@ export default function SavedPin({ user }) {
       let data = doc.data()
       pinIdArr.push(data.pinId)
     })
-    getPins(pinIdArr)
+    if (pinIdArr.length > 0) {
+      getPins(pinIdArr)
+    } else {
+      setIsLoading(false)
+    }
   }
 
   const getPins = async (arr) => {

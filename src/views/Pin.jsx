@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import {
   addDoc,
   collection,
@@ -5,29 +6,24 @@ import {
   doc,
   getDoc,
   getDocs,
-  query,
-  serverTimestamp,
-  setDoc,
+  query, setDoc,
   Timestamp,
-  where,
+  where
 } from 'firebase/firestore'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import Template from '../components/Template'
-import { db } from '../lib/firebase'
-import { linkGenerate } from '../lib/cloudinary'
-import UserContext from '../contexts/UserContext'
-import classNames from 'classnames'
-import Loader from '../components/Loader'
-import { FaCopy } from 'react-icons/fa'
-import { toast } from 'react-toastify'
-import { removeHttps, addHttps } from '../helpers'
-import { FaArrowLeft } from 'react-icons/fa'
 import { useForm } from 'react-hook-form'
+import { FaArrowLeft } from 'react-icons/fa'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Comment from '../components/Comment'
-import ProfilePic from '../components/ProfilePic'
-import PinDropdown from '../components/PinDropdown'
 import DeletePinModal from '../components/DeletePinModal'
+import Loader from '../components/Loader'
+import PinDropdown from '../components/PinDropdown'
+import ProfilePic from '../components/ProfilePic'
+import Template from '../components/Template'
+import UserContext from '../contexts/UserContext'
+import { addHttps, removeHttps } from '../helpers'
+import { linkGenerate } from '../lib/cloudinary'
+import { db } from '../lib/firebase'
 
 export default function Pin() {
   const { pinId } = useParams()

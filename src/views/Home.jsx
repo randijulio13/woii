@@ -1,11 +1,10 @@
 import { collection, getDocs, limit, query, where } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { FaSpinner } from 'react-icons/fa'
+import CreateButton from '../components/CreateButton'
+import Loader from '../components/Loader'
 import PinCard from '../components/PinCard'
 import Template from '../components/Template'
 import { db } from '../lib/firebase'
-import Loader from '../components/Loader'
-import CreateButton from '../components/CreateButton'
 
 export default function Home() {
   const [pins, setPins] = useState([])

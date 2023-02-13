@@ -5,6 +5,7 @@ import UserContext from '../contexts/UserContext'
 import DropdownButton from './DropdownButton'
 import { signOut } from 'firebase/auth'
 import { auth } from '../lib/firebase'
+import ProfilePic from './ProfilePic'
 
 export default function UserDropdown() {
     const { user, setUser } = useContext(UserContext)
@@ -19,7 +20,7 @@ export default function UserDropdown() {
         <Menu as="div">
             <div>
                 <Menu.Button className='rounded-full outline-none hover:bg-gray-100 duration-200 hover:scale-110 p-2 h-14 active:bg-white active:scale-100'>
-                    <img src={user.photoURL} className="rounded-full h-full" alt="" />
+                    <ProfilePic className="h-full" url={user?.photoURL} />
                 </Menu.Button>
             </div>
             <Transition
@@ -39,7 +40,7 @@ export default function UserDropdown() {
                                 <DropdownButton>
                                     <div className="flex gap-x-4 my-1">
                                         <div>
-                                            <img src={user.photoURL} className='rounded-full h-16' alt="" />
+                                            <ProfilePic url={user?.photoURL} className="h-16" />
                                         </div>
                                         <div className='w-auto flex flex-col justify-center items-start min-h-full'>
                                             <span className="font-bold">{user.displayName}</span>
