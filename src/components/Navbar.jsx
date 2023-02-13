@@ -13,7 +13,7 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="sticky top-0 z-50  flex h-[72px] w-full items-center justify-between bg-white px-5 shadow">
+    <nav className="sticky top-0 z-10  flex h-[72px] w-full items-center justify-between bg-white px-5 shadow">
       <div className="flex w-1/4 items-center space-x-4">
         <NavLink to="/" className="outline-none">
           <h1 className="flex items-center font-title text-3xl">

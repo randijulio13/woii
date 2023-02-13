@@ -46,15 +46,6 @@ export default function Profile() {
     })
   }
 
-  const getPins = async () => {
-    const q = query(collection(db, 'pins'), where('capital', '==', true))
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, ' => ', doc.data())
-    })
-  }
-
   const handleShareProfile = () => {
     let url = document.URL
     navigator.clipboard.writeText(url)

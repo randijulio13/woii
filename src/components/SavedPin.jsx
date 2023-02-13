@@ -78,7 +78,7 @@ export default function SavedPin({ user }) {
           <Loader />
         </div>
       ) : (
-        <div className="columns-1 gap-8 p-4 md:columns-2 lgmd:columns-4 lg:columns-6">
+        <div className="columns-1 gap-8 p-4 md:columns-2 lgmd:columns-4 lg:columns-5 xl:columns-6">
           {pins.map((pin, index) => {
             let user = getUser(pin.userId)
             return <PinCard {...{ pin, pinUser: user }} key={index} />

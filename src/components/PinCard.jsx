@@ -116,6 +116,10 @@ export default function PinCard({ pin, pinUser }) {
     }
   }
 
+  const handleDelete = async () => {
+    await deleteDoc(doc(db, 'pins', pin.id))
+  }
+
   const handleDownload = (event) => {
     event.stopPropagation()
     saveAs(linkGenerate(pin.publicId), pin.id + '.jpg')
@@ -161,7 +165,9 @@ export default function PinCard({ pin, pinUser }) {
               className="absolute left-3 bottom-3 flex items-center gap-x-2"
             >
               <ProfilePic url={pinUser?.photoURL} className="h-6" />
-              <span className="text-sm font-bold">{pinUser?.name}</span>
+              <span className="text-sm font-bold">
+                {pinUser?.email.split('@')[0]}
+              </span>
             </Link>
           </Hover>
         </DisplayOver>
