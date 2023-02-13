@@ -10,6 +10,7 @@ import classNames from 'classnames'
 import CreatedPin from '../components/CreatedPin'
 import SavedPin from '../components/SavedPin'
 import ProfilePic from '../components/ProfilePic'
+import CreateButton from '../components/CreateButton'
 
 export default function Profile() {
   const [profileUser, setProfileUser] = useState(null)
@@ -120,6 +121,7 @@ export default function Profile() {
           )}
         </div>
       </div>
+      {user?.uid == profileUser?.uid && <CreateButton />}
     </Template>
   )
 }
