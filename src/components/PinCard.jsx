@@ -85,10 +85,10 @@ export default function PinCard({ pin, pinUser }) {
     color: '#FFF',
     position: 'relative',
     cursor: 'zoom-in',
-    height: `${imgHeight}px`,
-    width: `100%`,
+    // height: `100%`,
+    // width: `100%`,
+    // backgroundImage: `url(${imageUrl})`,
     borderRadius: '20px',
-    backgroundImage: `url(${imageUrl})`,
     backgroundPosition: 'center',
     [`:hover ${DisplayOver}`]: {
       backgroundColor: 'rgba(0,0,0,.5)',
@@ -116,18 +116,26 @@ export default function PinCard({ pin, pinUser }) {
     }
   }
 
-  const handleDelete = async () => {
-    await deleteDoc(doc(db, 'pins', pin.id))
-  }
+  useEffect(() => {
+    console.log('height' + imgHeight)
+    console.log('width' + imgWidth)
+  }, [imgHeight, imgWidth])
 
   const handleDownload = (event) => {
     event.stopPropagation()
     saveAs(linkGenerate(pin.publicId), pin.id + '.jpg')
   }
 
+  {
+    /* <div className="mb-4 aspect-auto w-full"> */
+  }
+  {
+    /* <div className={`mb-4 aspect-auto w-[${imgWidth}px] h-[${imgHeight}px]`}> */
+  }
   return (
-    <div className="mb-4 aspect-auto w-full">
+    <div className={`mb-4 aspect-auto h-[${imgHeight}px] w-[${imgWidth}px]`}>
       <Background onClick={() => navigate(`/pin/${pin.id}`)}>
+        <img src={imageUrl} alt="" className='w-full' height={`${imgHeight}px`} />
         <DisplayOver>
           <Hover>
             <button
