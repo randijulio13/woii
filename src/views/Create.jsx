@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import Dropzone from '../components/Dropzone'
 import Loader from '../components/Loader'
+import ProfilePic from '../components/ProfilePic'
 import Template from '../components/Template'
 import UserContext from '../contexts/UserContext'
 import { removeHttps } from '../helpers'
@@ -106,10 +107,7 @@ export default function Create() {
                 </span>
               )}
               <div className="my-6 flex items-center gap-x-4">
-                <img
-                  src={user.photoURL}
-                  className="aspect-square h-12 rounded-full"
-                />
+                <ProfilePic url={user?.photoURL} className="h-12" />
                 <span className="font-bold">{user.displayName}</span>
               </div>
               <textarea
