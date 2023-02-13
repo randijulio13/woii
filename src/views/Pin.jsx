@@ -242,7 +242,7 @@ export default function Pin() {
                     className="flex items-center gap-x-2"
                   >
                     <ProfilePic url={pinUser?.photoURL} className="h-6" />
-                    <span className="text-sm font-bold">{pinUser?.name}</span>
+                    <span className="text-sm font-bold">{pinUser?.email?.split('@')[0]}</span>
                   </Link>
 
                   <p className="tracking-light text-sm">{pin?.description}</p>

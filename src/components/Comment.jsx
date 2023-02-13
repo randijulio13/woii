@@ -25,7 +25,7 @@ export default function Comment({ comment, users }) {
               to={`/profile/${commentUser?.email?.split('@')[0]}`}
               className="text-sm font-bold hover:underline"
             >
-              {commentUser?.email}
+              {commentUser?.email?.split('@')[0]}
             </Link>{' '}
             {comment?.comment}
           </span>
