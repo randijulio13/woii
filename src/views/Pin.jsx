@@ -237,7 +237,7 @@ export default function Pin() {
                     to={`/profile/${pinUser?.email.split('@')[0]}`}
                     className="flex items-center gap-x-2"
                   >
-                    <ProfilePic url={pinUser?.photoURL} className="h-6" />
+                    <ProfilePic url={pinUser?.photoURL} className="h-8" />
                     <span className="text-sm font-bold">{pinUser?.email?.split('@')[0]}</span>
                   </Link>
 

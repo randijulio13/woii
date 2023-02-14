@@ -118,7 +118,7 @@ export default function PinCard({ pin, pinUser }) {
   }
 
   return (
-    <div className={`mb-4 aspect-auto h-[${imgHeight}px] w-[${imgWidth}px]`}>
+    <div className={`mb-4 aspect-auto`}>
       <Background onClick={() => navigate(`/pin/${pin.id}`)}>
         <img src={imageUrl} alt="" className='w-full' height={`${imgHeight}px`} />
         <DisplayOver>

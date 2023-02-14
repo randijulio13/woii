@@ -1,5 +1,5 @@
 import { collection, getDocs, limit, query, where } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CreateButton from '../components/CreateButton'
 import Loader from '../components/Loader'
 import PinCard from '../components/PinCard'
@@ -9,17 +9,35 @@ import { db } from '../lib/firebase'
 export default function Home() {
   const [pins, setPins] = useState([])
   const [users, setUsers] = useState([])
-  const [queryLimit, setQueryLimit] = useState(20)
+  const [queryLimit, setQueryLimit] = useState(25)
+  const [limitReached, setLimitReached] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     getAllPins()
-  }, [])
+    window.addEventListener('scroll', handleScroll, {
+      passive: true,
+    })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [queryLimit])
+
+  const handleScroll = useCallback(() => {
+    const bottom =
+      Math.ceil(window.innerHeight + window.scrollY) >=
+      document.documentElement.scrollHeight
+    if (bottom) {
+      if (!limitReached) {
+        setQueryLimit((queryLimit) => queryLimit + 1)
+      }
+    }
+  }, [pins])
 
   const getAllPins = async () => {
     const querySnapshot = await getDocs(
-      collection(db, 'pins'),
-      limit(queryLimit)
+      query(collection(db, 'pins'), limit(queryLimit))
     )
 
     let arr = []
@@ -30,6 +48,9 @@ export default function Home() {
       arr.push(data)
       userArr.push(data.userId)
     })
+    if (arr.length < queryLimit) {
+      setLimitReached(true)
+    }
     setPins(arr)
     getAllUsers(userArr)
     setIsLoading(false)
