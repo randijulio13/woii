@@ -11,26 +11,28 @@ import CreatedPin from '../components/CreatedPin'
 import SavedPin from '../components/SavedPin'
 import ProfilePic from '../components/ProfilePic'
 import CreateButton from '../components/CreateButton'
+import { useNavigate } from 'react-router-dom'
 
 export default function Profile() {
   const [profileUser, setProfileUser] = useState(null)
   const { user } = useContext(UserContext)
   const [activeTab, setActiveTab] = useState('Created')
   let { userName } = useParams()
+  const navigate = useNavigate()
 
   const tabs = useMemo(() => {
     return [{ title: 'Created' }, { title: 'Saved' }]
   })
 
-  useEffect(() => {
+  const checkUser = () => {
     if (!userName) {
       userName = user.email.split('@')[0]
-      setProfileUser({
-        name: user.displayName,
-        photoURL: user.photoURL,
-        email: user.email,
-      })
+      navigate(`/profile/${userName}`)
     }
+  }
+
+  useEffect(() => {
+    checkUser()
     getUser()
   }, [userName])
 

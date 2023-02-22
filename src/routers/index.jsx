@@ -21,7 +21,7 @@ export default function index() {
         <Route path="/signin" element={<SignIn />} />
       </Route>
       <Route element={<Auth />}>
-        <Route path="/profile/:userName?" element={<Profile />} />
+        <Route path="/profile/:userName" element={<Profile />} />
       </Route>
       <Route path="*" element={<NoMatch />} />
     </Routes>

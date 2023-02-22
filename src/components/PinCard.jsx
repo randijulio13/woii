@@ -1,59 +1,26 @@
 import styled from '@emotion/styled/macro'
-import classNames from 'classnames'
 import { saveAs } from 'file-saver'
-import {
-  collection,
-  deleteDoc,
-  doc, getDocs,
-  query,
-  setDoc,
-  where
-} from 'firebase/firestore'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsArrowUpRightCircleFill } from 'react-icons/bs'
 import { MdDownloadForOffline } from 'react-icons/md'
 import { Link, useNavigate } from 'react-router-dom'
-import UserContext from '../contexts/UserContext'
 import { getImgMeta } from '../helpers'
 import { linkGenerate } from '../lib/cloudinary'
-import { db } from '../lib/firebase'
 import ProfilePic from './ProfilePic'
+import SavePinButton from './SavePinButton'
 
 export default function PinCard({ pin, pinUser }) {
-  const { user } = useContext(UserContext)
   const imageUrl = linkGenerate(pin.publicId, 250)
   const [imgHeight, setImgHeight] = useState(0)
-  const [imgWidth, setImgWidth] = useState(0)
-  const [isSaved, setIsSaved] = useState(false)
-  const [totalSave, setTotalSave] = useState(0)
   const navigate = useNavigate()
 
   useEffect(() => {
     getMeta()
-    getSavedPinUser()
   }, [])
-
-  const getIsSaved = async (docs) => {
-    docs.filter((doc) => {
-      doc = doc.data()
-      if (doc.uid == user.uid) {
-        setIsSaved(true)
-      }
-    })
-  }
-
-  const getSavedPinUser = async () => {
-    const q = query(collection(db, 'savedPins'), where('pinId', '==', pin.id))
-    const querySnapshot = await getDocs(q)
-    setTotalSave(querySnapshot.docs.length)
-
-    getIsSaved(querySnapshot.docs)
-  }
 
   const getMeta = async () => {
     let res = await getImgMeta(imageUrl)
     setImgHeight(res.naturalHeight)
-    setImgWidth(res.naturalWidth)
   }
 
   const Hover = styled.div({
@@ -81,9 +48,6 @@ export default function PinCard({ pin, pinUser }) {
     color: '#FFF',
     position: 'relative',
     cursor: 'zoom-in',
-    // height: `100%`,
-    // width: `100%`,
-    // backgroundImage: `url(${imageUrl})`,
     borderRadius: '20px',
     backgroundPosition: 'center',
     [`:hover ${DisplayOver}`]: {
@@ -94,24 +58,6 @@ export default function PinCard({ pin, pinUser }) {
     },
   })
 
-  const handleSavePin = async (event) => {
-    event.stopPropagation()
-
-    const savedPinId = `${user.uid}_${pin.id}`
-    if (isSaved) {
-      await deleteDoc(doc(db, 'savedPins', savedPinId))
-      setIsSaved(false)
-      setTotalSave((totalSave) => totalSave - 1)
-    } else {
-      await setDoc(doc(db, 'savedPins', savedPinId), {
-        uid: user.uid,
-        pinId: pin.id,
-      })
-      setIsSaved(true)
-      setTotalSave((totalSave) => totalSave + 1)
-    }
-  }
-
   const handleDownload = (event) => {
     event.stopPropagation()
     saveAs(linkGenerate(pin.publicId), pin.id + '.jpg')
@@ -120,7 +66,12 @@ export default function PinCard({ pin, pinUser }) {
   return (
     <div className={`mb-4 aspect-auto`}>
       <Background onClick={() => navigate(`/pin/${pin.id}`)}>
-        <img src={imageUrl} alt="" className='w-full' height={`${imgHeight}px`} />
+        <img
+          src={imageUrl}
+          alt=""
+          className="w-full"
+          height={`${imgHeight}px`}
+        />
         <DisplayOver>
           <Hover>
             <button
@@ -139,18 +90,7 @@ export default function PinCard({ pin, pinUser }) {
                 <BsArrowUpRightCircleFill />
               </a>
             )}
-            <button
-              onClick={handleSavePin}
-              className={classNames(
-                'absolute top-3 right-3 rounded-full py-2 px-4 font-bold text-white duration-300 hover:scale-110 active:scale-100',
-                {
-                  'bg-black hover:bg-gray-800': isSaved,
-                  'bg-red-500 hover:bg-red-600': !isSaved,
-                }
-              )}
-            >
-              {totalSave} {isSaved ? 'Saved' : 'Save'}
-            </button>
+            <SavePinButton pin={pin} className="top-3 right-3" />
 
             <Link
               onClick={(e) => e.stopPropagation()}

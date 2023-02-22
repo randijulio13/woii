@@ -6,9 +6,10 @@ import {
   doc,
   getDoc,
   getDocs,
-  query, setDoc,
+  query,
+  setDoc,
   Timestamp,
-  where
+  where,
 } from 'firebase/firestore'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -19,6 +20,7 @@ import DeletePinModal from '../components/DeletePinModal'
 import Loader from '../components/Loader'
 import PinDropdown from '../components/PinDropdown'
 import ProfilePic from '../components/ProfilePic'
+import SavePinButton from '../components/SavePinButton'
 import Template from '../components/Template'
 import UserContext from '../contexts/UserContext'
 import { addHttps, removeHttps } from '../helpers'
@@ -80,7 +82,10 @@ export default function Pin() {
   const getPin = async () => {
     const docSnap = await getDoc(docRef)
 
-    setPin(docSnap.data())
+    let data = docSnap.data()
+    data.id = docSnap.id
+
+    setPin(data)
     setImageUrl(() => linkGenerate(docSnap.data().publicId, 768))
     getPinUser(docSnap.data().userId)
   }
@@ -117,22 +122,6 @@ export default function Pin() {
     })
   }
 
-  const handleSavePin = async () => {
-    const savedPinId = `${user.uid}_${pinId}`
-    if (isSaved) {
-      await deleteDoc(doc(db, 'savedPins', savedPinId))
-      setIsSaved(false)
-      setTotalSave((totalSave) => totalSave - 1)
-    } else {
-      await setDoc(doc(db, 'savedPins', savedPinId), {
-        uid: user.uid,
-        pinId: pinId,
-      })
-      setIsSaved(true)
-      setTotalSave((totalSave) => totalSave + 1)
-    }
-  }
-
   const handleBack = () => {
     navigate(-1)
   }
@@ -157,17 +146,12 @@ export default function Pin() {
   }
 
   const addComment = async (data) => {
-    const docRef = await addDoc(collection(db, 'pinComments'), {
+    await addDoc(collection(db, 'pinComments'), {
       pinId,
       comment: data.comment,
       userId: user.uid,
       timestamp: Timestamp.fromDate(new Date()),
     })
-    // await addDoc(collection(docRef, 'comments'), {
-    //   comment: data.comment,
-    //   userId: user.uid,
-    //   timestamp: Timestamp.fromDate(new Date()),
-    // })
     reset()
     getComments()
   }
@@ -195,8 +179,8 @@ export default function Pin() {
             <div className="m-4 grid min-h-screen grid-cols-1 gap-x-4 lg:min-h-[256px] lg:grid-cols-2">
               <img
                 src={imageUrl}
-                className="rounded-2xl"
-                alt=""
+                className="w-full rounded-2xl"
+                alt={pin?.title}
                 ref={imageRef}
               />
               <div className="flex h-full flex-col gap-y-2 overflow-auto p-4">
@@ -205,18 +189,7 @@ export default function Pin() {
                     allowDelete={user?.uid == pin?.userId}
                     {...{ openDeleteModal }}
                   />
-                  <button
-                    onClick={handleSavePin}
-                    className={classNames(
-                      'rounded-300 rounded-full py-2 px-4 font-bold text-white outline-none duration-300 hover:scale-110 active:scale-100',
-                      {
-                        'bg-black hover:bg-gray-800': isSaved,
-                        'bg-red-500 hover:bg-red-600': !isSaved,
-                      }
-                    )}
-                  >
-                    {totalSave} {isSaved ? 'Saved' : 'Save'}
-                  </button>
+                  <SavePinButton pin={pin} className="top-0 right-0" />
                 </div>
                 <div className="max-h-[calc(100vh-72px)] space-y-4 overflow-auto">
                   {pin?.destinationLink && (
@@ -238,7 +211,9 @@ export default function Pin() {
                     className="flex items-center gap-x-2"
                   >
                     <ProfilePic url={pinUser?.photoURL} className="h-8" />
-                    <span className="text-sm font-bold">{pinUser?.email?.split('@')[0]}</span>
+                    <span className="text-sm font-bold">
+                      {pinUser?.email?.split('@')[0]}
+                    </span>
                   </Link>
 
                   <p className="tracking-light text-sm">{pin?.description}</p>
